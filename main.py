@@ -15,14 +15,20 @@ def entryname(name):
         return name
 
 @lru_cache(maxsize=2048)
+def fntime(fn):
+    return time.ctime(os.path.getmtime(fn))
+
+@lru_cache(maxsize=2048)
+def timestr(fn):
+    return "last modified: %s" % fntime(fn)
+
+@lru_cache(maxsize=2048)
 def getEntry(category,fn):
     entryfn = scriptpath + "/" + category + "/" + fn
     title = entryname(fn)
     with open(entryfn) as f:
         content = f.read()
-
-    modtime = "last modified: %s" % time.ctime(os.path.getmtime(entryfn))
-    return title, content, modtime
+    return title, content, timestr(entryfn)
 
 @lru_cache()
 def getCategories():
@@ -44,7 +50,7 @@ def entry(category,filename):
 
 @route('/category/<filename>')
 def cat(filename):
-    s = "\n".join(["* [" + entryname(e) + "](../entry/" + filename + "/" + e + ")" for e in getEntries(filename)])
+    s = "\n".join(["* [" + entryname(e) + " (" + timestr(scriptpath + "/" + filename + "/" + e) + ")](../entry/" + filename + "/" + e + ")" for e in getEntries(filename)])
     e = template("markdown.tpl", title="Category: " + filename, content=s)
     return e
 
