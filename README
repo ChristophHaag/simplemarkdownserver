@@ -1,0 +1,11 @@
+Simple script to get markdown content on the web
+
+Create directories as categories in the directory the main.py script is in
+
+Put markdown formatted .txt files inside those category directories
+The filename (minus .txt) will be the title of the entry
+The "modified" date of the file will be displayed in the category view and at the top of an entry view
+
+Uses
+* http://bottlepy.org (local installation required)
+* http://strapdownjs.com (Their hosted version is used)
